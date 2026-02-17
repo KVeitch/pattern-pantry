@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Top hat -->
+  <path d="M20 50 L20 34 Q20 20 34 20 L86 20 Q100 20 100 34 L100 50 Z" />
+  <path d="M26 50 L26 56 L94 56 L94 50" />
+  <path d="M60 20 L60 14 M56 14 L64 14" />
+  <!-- Scissors (tailor style: two rings, crossed blades) -->
+  <path d="M36 62 L36 96 Q36 102 42 102 Q48 102 48 96 L48 72 L52 66" />
+  <path d="M84 62 L84 96 Q84 102 78 102 Q72 102 72 96 L72 72 L68 66" />
+  <path d="M52 66 L68 66" />
+  <path d="M48 72 L60 62 L72 72" />
+  <path d="M60 62 L60 56" />
+</svg>
