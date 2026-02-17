@@ -1,65 +1,144 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import Grid from "@mui/material/Grid";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
+import CardActions from "@mui/material/CardActions";
+import Chip from "@mui/material/Chip";
+import Link from "next/link";
+import { usePatterns } from "@/context/PatternsContext";
+
+export default function HomePage() {
+  const { patterns } = usePatterns();
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <Box>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          mb: 3,
+          flexWrap: "wrap",
+          gap: 2,
+        }}
+      >
+        <Typography variant="h4" component="h1" fontWeight={600}>
+          Your Patterns
+        </Typography>
+        <Button
+          variant="contained"
+          color="primary"
+          component={Link}
+          href="/patterns/new"
+        >
+          Add Pattern
+        </Button>
+      </Box>
+
+      {patterns.length === 0 ? (
+        <Card
+          variant="outlined"
+          sx={{
+            textAlign: "center",
+            py: 6,
+            px: 3,
+            borderStyle: "dashed",
+            borderWidth: 2,
+          }}
+        >
+          <Typography variant="h6" color="text.secondary" gutterBottom>
+            No patterns yet
+          </Typography>
+          <Typography color="text.secondary" sx={{ mb: 2 }}>
+            Add your first sewing or cosplay pattern to start tracking fabrics and
+            cover photos.
+          </Typography>
+          <Button
+            variant="contained"
+            color="primary"
+            component={Link}
+            href="/patterns/new"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+            Add your first pattern
+          </Button>
+        </Card>
+      ) : (
+        <Grid container spacing={3}>
+          {patterns.map((pattern) => (
+            <Grid size={{ xs: 12, sm: 6, md: 4 }} key={pattern.id}>
+              <Card
+                component={Link}
+                href={`/patterns/${pattern.id}`}
+                sx={{
+                  height: "100%",
+                  display: "flex",
+                  flexDirection: "column",
+                  textDecoration: "none",
+                  color: "inherit",
+                  transition: "box-shadow 0.2s, transform 0.2s",
+                  "&:hover": {
+                    boxShadow: 4,
+                    transform: "translateY(-2px)",
+                  },
+                }}
+              >
+                <CardMedia
+                  component="div"
+                  sx={{
+                    height: 200,
+                    bgcolor: "grey.200",
+                    backgroundImage: pattern.coverFront
+                      ? `url(${pattern.coverFront.dataUrl})`
+                      : undefined,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                  }}
+                />
+                <CardContent sx={{ flexGrow: 1 }}>
+                  <Typography variant="h6" component="h2" gutterBottom>
+                    {pattern.name}
+                  </Typography>
+                  {pattern.brand && (
+                    <Typography variant="body2" color="text.secondary">
+                      {pattern.brand}
+                      {pattern.patternNumber && ` #${pattern.patternNumber}`}
+                    </Typography>
+                  )}
+                  {(pattern.era || (pattern.items?.length ?? 0) > 0) && (
+                    <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5, mt: 1 }}>
+                      {pattern.era && (
+                        <Chip label={pattern.era} size="small" variant="outlined" sx={{ fontSize: "0.75rem" }} />
+                      )}
+                      {(pattern.items ?? []).slice(0, 3).map((item) => (
+                        <Chip key={item} label={item} size="small" variant="outlined" color="primary" sx={{ fontSize: "0.75rem" }} />
+                      ))}
+                      {(pattern.items?.length ?? 0) > 3 && (
+                        <Chip label={`+${(pattern.items?.length ?? 0) - 3}`} size="small" sx={{ fontSize: "0.75rem" }} />
+                      )}
+                    </Box>
+                  )}
+                  {pattern.fabrics.length > 0 && (
+                    <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+                      {pattern.fabrics.length} fabric
+                      {pattern.fabrics.length !== 1 ? "s" : ""} needed
+                    </Typography>
+                  )}
+                </CardContent>
+                <CardActions>
+                  <Button size="small" component={Link} href={`/patterns/${pattern.id}`}>
+                    View details
+                  </Button>
+                </CardActions>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      )}
+    </Box>
   );
 }
