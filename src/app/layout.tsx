@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Roboto } from "next/font/google";
 import "./globals.css";
 import MuiThemeProvider from "./MuiThemeProvider";
 import AppLayout from "@/components/AppLayout";
+import PwaRegister from "@/components/PwaRegister";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -20,11 +21,16 @@ const roboto = Roboto({
   variable: "--font-roboto",
 });
 
+export const viewport = {
+  themeColor: "#1976d2",
+  width: "device-width",
+  initialScale: 1,
+};
+
 export const metadata: Metadata = {
   title: "Pattern Pantry – Sewing & Cosplay Pattern Manager",
   description: "Track your sewing patterns, fabrics, and pattern covers.",
   manifest: "/manifest.webmanifest",
-  themeColor: "#1976d2",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
@@ -47,6 +53,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} ${roboto.variable} ${roboto.className} antialiased`}
       >
         <MuiThemeProvider>
+          <PwaRegister />
           <AppLayout>{children}</AppLayout>
         </MuiThemeProvider>
       </body>
