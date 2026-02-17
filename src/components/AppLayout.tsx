@@ -53,33 +53,19 @@ export default function AppLayout({
           >
             <MenuIcon />
           </IconButton>
-          <Box
+          <Typography
+            variant="h6"
             component={Link}
             href="/"
             sx={{
-              display: "flex",
-              alignItems: "center",
-              gap: 1.5,
               flexGrow: 1,
               textDecoration: "none",
               color: "inherit",
+              fontWeight: 700,
             }}
           >
-            <Box
-              component="img"
-              src="/pattern-pantry-logo.svg"
-              alt=""
-              sx={{
-                width: 36,
-                height: 36,
-                filter: "brightness(0) invert(1)",
-                display: "block",
-              }}
-            />
-            <Typography variant="h6" sx={{ fontWeight: 700 }}>
-              Pattern Pantry
-            </Typography>
-          </Box>
+            Pattern Pantry
+          </Typography>
           <IconButton
             color="inherit"
             aria-label="Add pattern"
