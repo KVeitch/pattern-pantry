@@ -34,9 +34,9 @@ function generateId(): string {
 interface PatternFormProps {
   initial?: Pattern | null;
   onSubmit: (data: {
-    name: string;
     brand?: string;
     patternNumber?: string;
+    size?: string;
     era?: string;
     items: string[];
     notes?: string;
@@ -52,11 +52,11 @@ export default function PatternForm({
   onSubmit,
   onCancel,
 }: PatternFormProps) {
-  const [name, setName] = useState(initial?.name ?? "");
   const [brand, setBrand] = useState(initial?.brand ?? "");
   const [patternNumber, setPatternNumber] = useState(
     initial?.patternNumber ?? ""
   );
+  const [size, setSize] = useState(initial?.size ?? "");
   const [era, setEra] = useState(initial?.era ?? "");
   const [items, setItems] = useState<string[]>(initial?.items ?? []);
   const [itemInput, setItemInput] = useState("");
@@ -113,9 +113,9 @@ export default function PatternForm({
     e.preventDefault();
     const cleanedFabrics = fabrics.filter((f) => f.name.trim() || f.amount.trim());
     onSubmit({
-      name: name.trim(),
       brand: brand.trim() || undefined,
       patternNumber: patternNumber.trim() || undefined,
+      size: size.trim() || undefined,
       era: era.trim() || undefined,
       items: items.filter(Boolean),
       notes: notes.trim() || undefined,
@@ -134,13 +134,6 @@ export default function PatternForm({
           Pattern details
         </Typography>
         <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-          <TextField
-            label="Pattern name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-            fullWidth
-          />
           <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
             <TextField
               label="Brand"
@@ -154,6 +147,13 @@ export default function PatternForm({
               onChange={(e) => setPatternNumber(e.target.value)}
               placeholder="e.g. 1234"
               sx={{ minWidth: 140 }}
+            />
+            <TextField
+              label="Size"
+              value={size}
+              onChange={(e) => setSize(e.target.value)}
+              placeholder="e.g. 8, S, 34&quot;"
+              sx={{ minWidth: 120 }}
             />
             <TextField
               label="Era"

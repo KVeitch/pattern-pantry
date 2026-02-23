@@ -11,6 +11,7 @@ import CardActions from "@mui/material/CardActions";
 import Chip from "@mui/material/Chip";
 import Link from "next/link";
 import { usePatterns } from "@/context/PatternsContext";
+import { patternDisplayTitle } from "@/types/pattern";
 
 export default function HomePage() {
   const { patterns } = usePatterns();
@@ -101,14 +102,8 @@ export default function HomePage() {
                 />
                 <CardContent sx={{ flexGrow: 1 }}>
                   <Typography variant="h6" component="h2" gutterBottom>
-                    {pattern.name}
+                    {patternDisplayTitle(pattern)}
                   </Typography>
-                  {pattern.brand && (
-                    <Typography variant="body2" color="text.secondary">
-                      {pattern.brand}
-                      {pattern.patternNumber && ` #${pattern.patternNumber}`}
-                    </Typography>
-                  )}
                   {(pattern.era || (pattern.items?.length ?? 0) > 0) && (
                     <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5, mt: 1 }}>
                       {pattern.era && (

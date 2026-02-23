@@ -14,6 +14,7 @@ import ListItemText from "@mui/material/ListItemText";
 import Chip from "@mui/material/Chip";
 import Link from "next/link";
 import { usePatterns } from "@/context/PatternsContext";
+import { patternDisplayTitle } from "@/types/pattern";
 
 export default function PatternDetailPage() {
   const params = useParams();
@@ -56,12 +57,11 @@ export default function PatternDetailPage() {
       >
         <Box>
           <Typography variant="h4" component="h1" fontWeight={600}>
-            {pattern.name}
+            {patternDisplayTitle(pattern)}
           </Typography>
-          {(pattern.brand || pattern.patternNumber) && (
+          {(pattern.brand || pattern.patternNumber || pattern.size) && (
             <Typography variant="body1" color="text.secondary">
-              {pattern.brand}
-              {pattern.patternNumber && ` • #${pattern.patternNumber}`}
+              {[pattern.brand, pattern.patternNumber && `#${pattern.patternNumber}`, pattern.size && `Size ${pattern.size}`].filter(Boolean).join(" • ")}
             </Typography>
           )}
           {(pattern.era || (pattern.items && pattern.items.length > 0)) && (

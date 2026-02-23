@@ -19,9 +19,10 @@ export interface PatternCoverImage {
 
 export interface Pattern {
   id: string;
-  name: string;
   brand?: string;
   patternNumber?: string;
+  /** Size (e.g. "8", "S", "34\" bust") */
+  size?: string;
   /** Era of the pattern (e.g. "1940s", "Victorian", "Modern") – searchable */
   era?: string;
   /** Garment/item types this pattern makes (e.g. dress, blouse, jacket) – searchable */
@@ -32,4 +33,14 @@ export interface Pattern {
   coverBack?: PatternCoverImage;
   createdAt: string; // ISO date
   updatedAt: string;
+}
+
+/** Short display title for lists/cards (brand, #number, size) */
+export function patternDisplayTitle(p: Pattern): string {
+  const parts = [
+    p.brand,
+    p.patternNumber ? `#${p.patternNumber}` : null,
+    p.size ? `Size ${p.size}` : null,
+  ].filter(Boolean);
+  return parts.length ? parts.join(" ") : "Pattern";
 }

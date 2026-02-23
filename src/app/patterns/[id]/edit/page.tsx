@@ -15,9 +15,9 @@ export default function EditPatternPage() {
   const pattern = getPatternById(id);
 
   const handleSubmit = (data: {
-    name: string;
     brand?: string;
     patternNumber?: string;
+    size?: string;
     era?: string;
     items: string[];
     notes?: string;
@@ -29,9 +29,9 @@ export default function EditPatternPage() {
       c ? { id: c.id, type: c.type, dataUrl: c.dataUrl, fileName: c.fileName } : undefined;
 
     updatePattern(id, {
-      name: data.name,
       brand: data.brand,
       patternNumber: data.patternNumber,
+      size: data.size,
       era: data.era,
       items: data.items ?? [],
       notes: data.notes,

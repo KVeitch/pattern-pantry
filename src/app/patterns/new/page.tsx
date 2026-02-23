@@ -12,9 +12,9 @@ export default function NewPatternPage() {
   const { addPattern } = usePatterns();
 
   const handleSubmit = (data: {
-    name: string;
     brand?: string;
     patternNumber?: string;
+    size?: string;
     era?: string;
     items: string[];
     notes?: string;
@@ -26,9 +26,9 @@ export default function NewPatternPage() {
       c ? { id: c.id, type: c.type, dataUrl: c.dataUrl, fileName: c.fileName } : undefined;
 
     addPattern({
-      name: data.name,
       brand: data.brand,
       patternNumber: data.patternNumber,
+      size: data.size,
       era: data.era,
       items: data.items ?? [],
       notes: data.notes,
