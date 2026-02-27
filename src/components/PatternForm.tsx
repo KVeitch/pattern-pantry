@@ -10,7 +10,7 @@ import Paper from "@mui/material/Paper";
 import Chip from "@mui/material/Chip";
 import SvgIcon from "@mui/material/SvgIcon";
 import PhotoCapture, { type CaptureResult } from "./PhotoCapture";
-import type { FabricRequirement, Pattern } from "@/types/pattern";
+import type { FabricRequirement, Notion, Pattern } from "@/types/pattern";
 
 function AddIcon() {
   return (
@@ -41,6 +41,7 @@ interface PatternFormProps {
     items: string[];
     notes?: string;
     fabrics: FabricRequirement[];
+    notions: Notion[];
     coverFront: CaptureResult | null;
     coverBack: CaptureResult | null;
   }) => void;
@@ -66,6 +67,11 @@ export default function PatternForm({
       ? initial.fabrics.map((f) => ({ ...f }))
       : [{ id: generateId(), name: "", amount: "", notes: "" }]
   );
+  const [notions, setNotions] = useState<Notion[]>(
+    initial?.notions?.length
+      ? initial.notions.map((n) => ({ ...n }))
+      : [{ id: generateId(), type: "", size: "", quantity: "", notes: "" }]
+  );
   const [coverFront, setCoverFront] = useState<CaptureResult | null>(
     initial?.coverFront ?? null
   );
@@ -90,6 +96,23 @@ export default function PatternForm({
     setFabrics((prev) => prev.filter((f) => f.id !== id));
   };
 
+  const addNotion = () => {
+    setNotions((prev) => [
+      ...prev,
+      { id: generateId(), type: "", size: "", quantity: "", notes: "" },
+    ]);
+  };
+
+  const updateNotion = (id: string, updates: Partial<Notion>) => {
+    setNotions((prev) =>
+      prev.map((n) => (n.id === id ? { ...n, ...updates } : n))
+    );
+  };
+
+  const removeNotion = (id: string) => {
+    setNotions((prev) => prev.filter((n) => n.id !== id));
+  };
+
   const addItem = () => {
     const trimmed = itemInput.trim();
     if (trimmed && !items.includes(trimmed)) {
@@ -112,6 +135,7 @@ export default function PatternForm({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const cleanedFabrics = fabrics.filter((f) => f.name.trim() || f.amount.trim());
+    const cleanedNotions = notions.filter((n) => n.type.trim() || n.quantity.trim());
     onSubmit({
       brand: brand.trim() || undefined,
       patternNumber: patternNumber.trim() || undefined,
@@ -122,6 +146,9 @@ export default function PatternForm({
       fabrics: cleanedFabrics.length
         ? cleanedFabrics
         : [{ id: generateId(), name: "", amount: "", notes: "" }],
+      notions: cleanedNotions.length
+        ? cleanedNotions
+        : [{ id: generateId(), type: "", size: "", quantity: "", notes: "" }],
       coverFront: coverFront || null,
       coverBack: coverBack || null,
     });
@@ -288,6 +315,80 @@ export default function PatternForm({
               onClick={() => removeFabric(f.id)}
               color="error"
               disabled={fabrics.length <= 1}
+            >
+              <DeleteOutlineIcon />
+            </IconButton>
+          </Box>
+        ))}
+      </Paper>
+
+      <Paper variant="outlined" sx={{ p: 3, mb: 3 }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            mb: 2,
+          }}
+        >
+          <Typography variant="h6">Notions</Typography>
+          <Button
+            type="button"
+            size="small"
+            startIcon={<AddIcon />}
+            onClick={addNotion}
+          >
+            Add notion
+          </Button>
+        </Box>
+        {notions.map((n) => (
+          <Box
+            key={n.id}
+            sx={{
+              display: "flex",
+              gap: 1,
+              alignItems: "flex-start",
+              flexWrap: "wrap",
+              mb: 2,
+            }}
+          >
+            <TextField
+              label="Type"
+              value={n.type}
+              onChange={(e) => updateNotion(n.id, { type: e.target.value })}
+              placeholder="e.g. button, zipper, snap"
+              size="small"
+              sx={{ minWidth: 140 }}
+            />
+            <TextField
+              label="Size"
+              value={n.size ?? ""}
+              onChange={(e) => updateNotion(n.id, { size: e.target.value })}
+              placeholder="e.g. 18mm, 7&quot;"
+              size="small"
+              sx={{ minWidth: 100 }}
+            />
+            <TextField
+              label="Quantity"
+              value={n.quantity}
+              onChange={(e) => updateNotion(n.id, { quantity: e.target.value })}
+              placeholder="e.g. 6, 1 set"
+              size="small"
+              sx={{ minWidth: 100 }}
+            />
+            <TextField
+              label="Notes"
+              value={n.notes ?? ""}
+              onChange={(e) => updateNotion(n.id, { notes: e.target.value })}
+              placeholder="Optional"
+              size="small"
+              sx={{ minWidth: 140, flex: 1 }}
+            />
+            <IconButton
+              size="small"
+              onClick={() => removeNotion(n.id)}
+              color="error"
+              disabled={notions.length <= 1}
             >
               <DeleteOutlineIcon />
             </IconButton>

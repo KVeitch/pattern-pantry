@@ -22,6 +22,7 @@ export default function EditPatternPage() {
     items: string[];
     notes?: string;
     fabrics: { id: string; name: string; amount: string; notes?: string }[];
+    notions: { id: string; type: string; size?: string; quantity: string }[];
     coverFront: CaptureResult | null;
     coverBack: CaptureResult | null;
   }) => {
@@ -36,6 +37,7 @@ export default function EditPatternPage() {
       items: data.items ?? [],
       notes: data.notes,
       fabrics: data.fabrics,
+      notions: data.notions ?? [],
       coverFront: coverToImage(data.coverFront),
       coverBack: coverToImage(data.coverBack),
     });

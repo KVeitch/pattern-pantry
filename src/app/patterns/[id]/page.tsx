@@ -161,6 +161,39 @@ export default function PatternDetailPage() {
         )}
       </Paper>
 
+      {/* Notions */}
+      <Paper variant="outlined" sx={{ p: 2, mt: 2 }}>
+        <Typography variant="h6" gutterBottom>
+          Notions
+        </Typography>
+        {!pattern.notions?.length ? (
+          <Typography color="text.secondary">No notions added yet.</Typography>
+        ) : (
+          <List disablePadding>
+            {pattern.notions.map((n) => (
+              <ListItem key={n.id} disablePadding sx={{ py: 0.5 }}>
+                <ListItemText
+                  primary={n.type}
+                  secondary={
+                    <>
+                      <Typography component="span" variant="body2" color="text.secondary">
+                        {[n.size && `Size ${n.size}`, n.quantity && `Qty ${n.quantity}`].filter(Boolean).join(" • ") || "—"}
+                      </Typography>
+                      {n.notes && (
+                        <Typography component="span" variant="body2" color="text.secondary" display="block" sx={{ mt: 0.25 }}>
+                          {n.notes}
+                        </Typography>
+                      )}
+                    </>
+                  }
+                />
+                {n.quantity && <Chip label={n.quantity} size="small" variant="outlined" />}
+              </ListItem>
+            ))}
+          </List>
+        )}
+      </Paper>
+
       {pattern.notes && (
         <Paper variant="outlined" sx={{ p: 2, mt: 2 }}>
           <Typography variant="h6" gutterBottom>

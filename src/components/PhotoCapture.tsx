@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
@@ -75,16 +75,23 @@ export default function PhotoCapture({
     e.target.value = "";
   };
 
+  // Attach stream to video after it mounts (video only exists once stream is set)
+  useEffect(() => {
+    if (stream && videoRef.current) {
+      videoRef.current.srcObject = stream;
+    }
+  }, [stream]);
+
   const handleStartCamera = async () => {
     setCameraError(null);
     try {
+      // "user" = front-facing/webcam (laptops); "environment" = rear (phones).
+      // Use ideal so we fall back to any camera when only one exists (e.g. laptop).
+      const facing = type === "back" ? "environment" : "user";
       const mediaStream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: "environment" },
+        video: { facingMode: { ideal: facing } },
       });
       setStream(mediaStream);
-      if (videoRef.current) {
-        videoRef.current.srcObject = mediaStream;
-      }
     } catch (err) {
       setCameraError(
         err instanceof Error ? err.message : "Could not access camera"
@@ -105,6 +112,10 @@ export default function PhotoCapture({
   const handleCapture = () => {
     if (!videoRef.current || !stream) return;
     const video = videoRef.current;
+    if (!video.videoWidth || !video.videoHeight) {
+      setCameraError("Please wait for the camera to start");
+      return;
+    }
     const canvas = document.createElement("canvas");
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;

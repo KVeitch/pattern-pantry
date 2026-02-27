@@ -10,6 +10,14 @@ export interface FabricRequirement {
   notes?: string;
 }
 
+export interface Notion {
+  id: string;
+  type: string; // e.g. button, zipper, snap
+  size?: string;
+  quantity: string; // e.g. "2", "1 set", "3"
+  notes?: string;
+}
+
 export interface PatternCoverImage {
   id: string;
   type: "front" | "back";
@@ -29,6 +37,7 @@ export interface Pattern {
   items?: string[];
   notes?: string;
   fabrics: FabricRequirement[];
+  notions?: Notion[];
   coverFront?: PatternCoverImage;
   coverBack?: PatternCoverImage;
   createdAt: string; // ISO date
